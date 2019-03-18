@@ -22,16 +22,11 @@ class Notmuch < Formula
   depends_on "emacs"
   depends_on "glib"
   depends_on "gmime"
+  depends_on "python" if build.with? "python3"
   depends_on "python@2"
   depends_on "talloc"
   depends_on "xapian"
   depends_on "zlib"
-
-  # If we're installing the python3 bindings, we obviously
-  # need to depend on python3 as well
-  if build.with? "python3" then
-    depends_on "python"
-  end
 
   def install
     args = %W[
@@ -53,7 +48,7 @@ class Notmuch < Formula
       system "python2.7", *Language::Python.setup_install_args(prefix)
 
       # Install python3 bindings if indicated
-      if build.with? "python3" then
+      if build.with? "python3"
         system "python3", *Language::Python.setup_install_args(prefix)
       end
     end
