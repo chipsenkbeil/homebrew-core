@@ -13,6 +13,8 @@ class Notmuch < Formula
     sha256 "bc53f8af373350cb3a993ca381eaaf1245d70874e24611c9a7e95568e96f922a" => :sierra
   end
 
+  option "with-python3", "Will build and install bindings for python3"
+
   depends_on "doxygen" => :build
   depends_on "libgpg-error" => :build
   depends_on "pkg-config" => :build
@@ -24,6 +26,12 @@ class Notmuch < Formula
   depends_on "talloc"
   depends_on "xapian"
   depends_on "zlib"
+
+  # If we're installing the python3 bindings, we obviously
+  # need to depend on python3 as well
+  if build.with? "python3" then
+    depends_on "python"
+  end
 
   def install
     args = %W[
@@ -43,6 +51,11 @@ class Notmuch < Formula
 
     cd "bindings/python" do
       system "python2.7", *Language::Python.setup_install_args(prefix)
+
+      # Install python3 bindings if indicated
+      if build.with? "python3" then
+        system "python3", *Language::Python.setup_install_args(prefix)
+      end
     end
   end
 
